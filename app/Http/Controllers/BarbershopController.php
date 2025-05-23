@@ -24,6 +24,8 @@ class BarbershopController extends Controller
         $this->middleware('auth')->only(['createInitial', 'editBusiness']);
     }
 
+    
+
     /**
      * Display a listing of the barbershops.
      * Handles initial load and AJAX requests for infinite scroll (if implemented).

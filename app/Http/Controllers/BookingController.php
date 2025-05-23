@@ -154,7 +154,7 @@ class BookingController extends Controller
          // if the frontend is capable of reading the flash session on the target page.
 
          // If you modified LoginController to redirect here, ensure you still redirect
-         // to the intended page or a default after handling/checking session data.
+         // to the intended page or the dashboard.
          // Example:
          // if (Session::has('booking_services')) {
          //     // Data was likely handled by frontend init script
@@ -165,5 +165,32 @@ class BookingController extends Controller
          return redirect()->intended(route('dashboard')); // Redirect to the new dashboard
     }
 
-    // You might add methods for showing a single booking, editing, cancelling, etc.
+    /**
+     * Display received bookings for a business user.
+     *
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function receivedBookings()
+    {
+        $user = Auth::user();
+
+        // Ensure the user is a business user
+        if (!$user->isBusiness()) {
+            return redirect()->route('home')->with('error', 'Access denied.');
+        }
+
+        // Fetch the barbershop owned by the business user
+        $barbershop = $user->barbershop;
+
+        if (!$barbershop) {
+            // If the business user doesn't have a barbershop, redirect them to create one
+            return redirect()->route('barbershops.create.initial')->with('info', 'Please create your barbershop profile first.');
+        }
+
+        // Fetch bookings made FOR this barbershop
+        $receivedBookings = $barbershop->bookings()->with('user')->latest()->paginate(10); // Eager load the user who made the booking
+
+        // Return the view for received bookings
+        return view('barbershop.bookings.received', compact('receivedBookings')); // Assuming a view at resources/views/barbershop/bookings/received.blade.php
+    }
 }

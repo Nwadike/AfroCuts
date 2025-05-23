@@ -68,4 +68,25 @@ class Barbershop extends Model
      }
 
      // Removed: public function services() { ... } // Relationship is no longer needed
+
+     public function ratings()
+    {
+    return $this->hasMany(Rating::class);
+    }
+
+    public function averageRating()
+    {
+    return $this->ratings()->avg('rating');
+    }
+
+    public function ratingBreakdown()
+    {
+    return $this->ratings()
+        ->selectRaw('rating, COUNT(*) as count')
+        ->groupBy('rating')
+        ->pluck('count', 'rating')
+        ->all();
+    }
+
+
 }

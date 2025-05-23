@@ -82,4 +82,10 @@ class User extends Authenticatable
      {
          return $this->account_type === 'regular';
      }
+
+     public function ratings()
+    {   
+    return $this->hasMany(Rating::class);
+    }
+
 }
