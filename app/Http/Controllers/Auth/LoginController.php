@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -14,8 +14,7 @@ class LoginController extends Controller
     |--------------------------------------------------------------------------
     |
     | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
+    | redirecting them to their respective dashboards based on account type.
     |
     */
 
@@ -23,11 +22,11 @@ class LoginController extends Controller
 
     /**
      * Where to redirect users after login.
+     * This is unused since we override `authenticated()`.
      *
      * @var string
      */
-    // Protected $redirectTo = RouteServiceProvider::HOME; // Original redirect
-    protected $redirectTo = '/dashboard'; // Redirect to the dashboard route
+    protected $redirectTo = '/dashboard'; // Default fallback, not used in practice
 
     /**
      * Create a new controller instance.
@@ -41,20 +40,24 @@ class LoginController extends Controller
 
     /**
      * The user has been authenticated.
+     * Redirect based on account_type.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  mixed  $user
      * @return mixed
      */
-    protected function authenticated(\Illuminate\Http\Request $request, $user)
+    protected function authenticated(Request $request, $user)
     {
-        // You can add custom logic here after a user is authenticated
-        // For example, checking for booking session data and redirecting
-        // if (Session::has('booking_services')) {
-        //     return redirect()->route('post_login_booking_handler'); // Example custom handler
-        // }
-
-        // Default redirect defined by $redirectTo
-        return redirect()->intended($this->redirectPath());
+        switch ($user->account_type) {
+            case 'superadmin':
+                return redirect()->route('superadmin.dashboard');
+            case 'admin':
+                return redirect()->route('admin.dashboard');
+            case 'business':
+                return redirect()->route('business.dashboard');
+            case 'regular':
+            default:
+                return redirect()->route('user.dashboard');
+        }
     }
 }

@@ -11,18 +11,56 @@ use App\Http\Controllers\UserController; // Assuming you have a UserController f
 use App\Http\Controllers\ProfileController; // Assuming you have a ProfileController for profile settings
 use App\Http\Controllers\BarbershopFeatureController; // Placeholder controller for new barbershop features
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\BusinessDashboardController;
+use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\AdminDashboardController;
 
 
-Auth::routes();
 
 // Home page route
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+Auth::routes();
+
+
+//Authenticated user routes
+
+Route::middleware(['auth', 'check.role:regular'])->get('/dashboard/user', [UserDashboardController::class, 'index'])->name('dashboard.user');
+
+Route::middleware(['auth', 'check.role:business'])->get('/dashboard/business', [BusinessDashboardController::class, 'index'])->name('dashboard.business');
+
+Route::middleware(['auth', 'check.role:admin'])->get('/dashboard/admin', [AdminDashboardController::class, 'index'])->name('dashboard.admin');
+
+Route::middleware(['auth', 'check.role:superadmin'])->get('/dashboard/superadmin', [SuperAdminController::class, 'index'])->name('dashboard.superadmin');
+
+Route::middleware(['auth', 'check.role:superadmin'])->prefix('superadmin')->group(function () {
+    Route::get('/dashboard', [SuperAdminController::class, 'index'])->name('superadmin.dashboard');
+    Route::get('/users', [SuperAdminController::class, 'manageUsers'])->name('superadmin.users');
+    Route::get('/barbershops', [SuperAdminController::class, 'manageBarbershops'])->name('superadmin.barbershops');
+    Route::get('/bookings', [SuperAdminController::class, 'viewBookings'])->name('superadmin.bookings');
+    Route::post('/assign-role', [SuperAdminController::class, 'assignRole'])->name('superadmin.assignRole');
+    Route::post('/create-admin', [SuperAdminController::class, 'createAdmin'])->name('superadmin.createAdmin');
+});
+
+
 // Public routes for barbershops index, search, and show
 Route::get('/barbershops', [BarbershopController::class, 'index'])->name('barbershops.index');
 Route::get('/barbershops/search', [BarbershopController::class, 'search'])->name('barbershops.search');
 Route::get('/barbershops/{barbershop}', [BarbershopController::class, 'show'])->name('barbershops.show');
+
+//Add barbershop as favorite
+Route::post('/favorite/{barbershopId}', [FavoriteController::class, 'store'])->name('favorite.store');
+Route::delete('/favorite/{barbershopId}', [FavoriteController::class, 'destroy'])->name('favorite.destroy');
+
+// Login routes 
+Route::middleware(['auth'])->group(function () {
+Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+Route::get('/business/dashboard', [BusinessDashboardController::class, 'index'])->name('business.dashboard');
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+});
+
 
 // Authenticated user routes
 Route::middleware(['auth'])->group(function () {
@@ -74,15 +112,7 @@ Route::middleware(['auth'])->group(function () {
     //Ratings route
     Route::middleware(['auth'])->post('/barbershop/{id}/rate', [RatingController::class, 'store'])->name('barbershop.rate');
 
-    // Optional: Modify Login/Register redirects to go to dashboard
-    // You would typically set the protected $redirectTo property in LoginController and RegisterController
-    // to '/dashboard' or route('dashboard'). Example:
-    // protected $redirectTo = RouteServiceProvider::HOME; // Change this in LoginController/RegisterController
-    // to protected $redirectTo = '/dashboard'; or protected $redirectTo = route('dashboard');
 
-    // If you need custom logic after login/register (e.g., handling booking session data),
-    // you might override the authenticated/registered methods in LoginController/RegisterController
-    // or use middleware.
 
 });
 

@@ -37,6 +37,20 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+    //Check if is superadmin
+
+    public function isSuperAdmin()
+    {
+        return $this->role === 'superadmin';
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin' || $this->isSuperAdmin();
+    }
+
+
     /**
      * The attributes that should be cast.
      *
@@ -86,6 +100,12 @@ class User extends Authenticatable
      public function ratings()
     {   
     return $this->hasMany(Rating::class);
+    return $this->hasMany(\App\Models\Rating::class);
+    }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Barbershop::class, 'favorites')->withTimestamps();
     }
 
 }

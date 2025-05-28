@@ -1,61 +1,110 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+AfroCuts
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+AfroCuts is a web application designed to serve as a comprehensive directory for black barbershops. It aims to connect users with barbershops specializing in diverse hair types and styles within the black community, making it easier to discover, locate, and potentially book services.
 
-## About Laravel
+Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+* Search and browse barbershops.
+* View barbershop details (location, contact, services, etc.).
+* (Mention any other key features your app has, e.g., user reviews, ratings, booking integration, etc.)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Technologies Used
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* Laravel (PHP Framework)
+* MySQL (Database)
+* (List any other significant technologies, e.g., Blade Templating, Alpine.js, Livewire, specific frontend libraries like React/Vue if used, etc.)
 
-## Learning Laravel
+Getting Started
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Follow these steps to get AfroCuts running on your local machine for development and testing purposes.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Prerequisites
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Before you begin, ensure you have the following installed:
 
-## Laravel Sponsors
+* PHP: Version 8.1 or higher (check php -v)
+* Composer: (check composer -v) - https://getcomposer.org/
+* Node.js & npm (or Yarn): (check node -v and npm -v or yarn -v) - https://nodejs.org/
+* Database Server: MySQL is used by default in the .env.example, but you can configure it for PostgreSQL or SQLite if preferred. Ensure your chosen database server is running.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Local Development Setup
 
-### Premium Partners
+1. Clone the Repository:
+   Clone the project from GitHub to your local machine using Git:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+   git clone https://github.com/Nwadike/AfroCuts.git
 
-## Contributing
+2. Navigate to the Project Directory:
+   Change into the newly created project directory:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+   cd AfroCuts
 
-## Code of Conduct
+3. Install PHP Dependencies:
+   Install the backend dependencies using Composer:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   composer install
 
-## Security Vulnerabilities
+4. Copy Environment File:
+   Create a copy of the example environment file:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   cp .env.example .env
 
-## License
+5. Configure Environment Variables:
+   Open the .env file in a text editor and update the following sections:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+   * App Key: Generate a unique application key if it's not already present:
+     php artisan key:generate
+     This command automatically updates the APP_KEY in your .env file.
+
+   * Database Configuration: Configure your database connection details. If using MySQL locally, ensure your server is running and replace the placeholder values:
+     DB_CONNECTION=mysql
+     DB_HOST=127.0.0.1
+     DB_PORT=3306
+     DB_DATABASE=afrocuts_db  # Choose a name for your database
+     DB_USERNAME=your_db_username
+     DB_PASSWORD=your_db_password
+
+6. Create the Database:
+   Log in to your database server (e.g., using phpMyAdmin, MySQL Workbench, or the command line) and create a new database with the name you specified in the DB_DATABASE variable in your .env file (e.g., afrocuts_db).
+
+7. Run Database Migrations:
+   Apply the database schema using Artisan migrations:
+
+   php artisan migrate
+
+8. Seed the Database (Optional):
+   If the project includes seeders to populate the database with initial or test data, run them:
+
+   php artisan db:seed
+
+9. Install Frontend Dependencies:
+   Install the frontend dependencies using npm or Yarn:
+
+   npm install
+   # or
+   # yarn install
+
+10. Compile Frontend Assets:
+    Compile your project's frontend assets (CSS, JavaScript). For local development with hot-reloading:
+
+    npm run dev
+    # or
+    # yarn dev
+
+    For a production-ready build (often done before deployment, but can be tested locally):
+
+    npm run build
+    # or
+    # yarn build
+
+11. Start the Local Development Server:
+    Start the Laravel development server using Artisan:
+
+    php artisan serve
+
+    This will typically start the server at http://127.0.0.1:8000.
+
+12. Access the Application:
+    Open your web browser and visit the URL shown in your terminal (usually http://127.0.0.1:8000).
+
+You should now see the AfroCuts application running locally.
