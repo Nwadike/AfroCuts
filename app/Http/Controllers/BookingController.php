@@ -59,7 +59,7 @@ class BookingController extends Controller
 
 
         // Return the dashboard view, passing the appropriate data
-        return view('users.dashboard', compact('bookings', 'receivedBookings')); // Pass both variables
+        return view('business.dashboard', compact('bookings', 'receivedBookings')); // Pass both variables
     }
 
     /**
